@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="src/css/style.css">
+    </head>
+    <script id="shader-fs" type="x-shader/x-fragment">
+        precision mediump float;
+
+        //Color of the current side of the cube
+        varying vec4 vColor;
+        //The lighting weight of the current side of the cube
+        varying vec3 vLightWeighting;
+
+        void main(void)
+        {
+            gl_FragColor = vec4(vColor.rgb * vLightWeighting, vColor.a);
+        }
+    </script>
+
+    <script id="shader-vs" type="x-shader/x-vertex">
+
+        attribute vec3 vertexPosition;
+        attribute vec3 vertexNormal;
+        attribute vec4 vertexColor;
+
+        uniform mat4 mvMatrix;
+        uniform mat4 pMatrix;
+        uniform mat3 nMatrix;
+
+        uniform vec3 ambientColor;
+        uniform vec3 pointLightingLocation;
+        varying vec4 vColor;
+        varying vec3 vLightWeighting;
+
+        void main(void)
+        {
+            vec4 mvPosition = mvMatrix * vec4(vertexPosition, 1.0);
+            gl_Position = pMatrix * mvPosition;
+            vColor = vertexColor;
+
+            vec3 lightDirection = normalize( pointLightingLocation - mvPosition.xyz );
+            vec3 transformedNormal = nMatrix * vertexNormal;
+            float directionalLightWeighting = max(dot(transformedNormal, lightDirection), 0.0);
+            vLightWeighting = ambientColor + vec3( 0.5,0.5,0.5 ) * directionalLightWeighting;
+        }
+    </script>
+    <script data-main="src/app/app.js" src="src/lib/require.js"></script>
+    <script>
+        function webGLStart()
+        {
+            var canvas = document.getElementById('canvas');
+            //Set canvas to full screen
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+    </script>
+    <body onload="webGLStart();">
+        <p>FPS: </p>
+        <p id="fps"></p>
+        <canvas id="canvas" style=""></canvas>
+    </body>
+
+</html>

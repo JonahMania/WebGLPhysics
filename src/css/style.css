@@ -1,0 +1,31 @@
+*
+{
+    margin:0;
+    padding:0;
+}
+
+html, body
+{
+    width:100%;
+    height:100%;
+}
+
+#canvas
+{
+    display:block;
+}
+
+p
+{
+    color:white;
+    position:absolute;
+    display:inline;
+    font-size: 1.2em;
+    left: 10px;
+    top: 10px;
+}
+
+#fps
+{
+    left:55px;
+}
