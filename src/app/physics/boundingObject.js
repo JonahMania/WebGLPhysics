@@ -1,8 +1,6 @@
 define(['gl-matrix-min'], function(glm)
 {
-    /**
-    *
-    */
+
     var BoundingObject = function( x, y, z )
     {
         this.center = glm.vec3.fromValues(x,y,z);
