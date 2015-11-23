@@ -18,8 +18,6 @@ requirejs([
     'init/getShaders',
     'app/factory',
     'app/input',
-    'physics/sphereSphereCollisionDetection',
-    'physics/oBBOBBCollisionDetection',
     'physics/sphereOBBCollisionDetection'],
     function( glm,
         getCanvas,
@@ -27,9 +25,7 @@ requirejs([
         getShaders,
         factory,
         input,
-        sphereSphereCollisionDetection,
-        obbOBBCollisionDetection,
-        sphereOBBCollisionDetection )
+        OBBSphereCD )
     {
         window.requestAnimFrame = (function()
         {
@@ -60,51 +56,34 @@ requirejs([
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.enable(gl.DEPTH_TEST);
 
-        var delta;
         var fps = 0;
         var oldTime = 0;
-
+        var timeDiff = 0;
+        
         var viewYRotation = 0;
         var lastMouseX;
-
-        var cubeRotationX = 2;
-        var cubeRotationY = 2;
 
         //Initial positions of all objects in the scene
         var fact = new factory();
 
         //Create physics objects
         var physicsObjects = [];
-        physicsObjects.push([
-            fact.createBoundingSphere(-3,2,0,1),
-            fact.createSphere( -3, 2, 0, 1, 20, 20, 0.0, 1.0, 1.0 )
-        ]);
-        physicsObjects.push([
-            fact.createCubeOBB(2,0.5,0,1),
-            fact.createCube( 2, 0.5, 0, 1, 0.5, 0.5, 1.0 )
-        ]);
-        physicsObjects.push([
-            fact.createBoundingSphere(0,2,0,1),
-            fact.createSphere( 0, 2, 0, 1, 20, 20, 0.5, 0.5, 1.0 )
-        ]);
-        physicsObjects.push([
-            fact.createCubeOBB(-1,0.5,0,1),
-            fact.createCube( -1, 0.5, 0, 1, 0.5, 0.5, 1.0 )
-        ]);
+        
+        physicsObjects.push(
+            fact.createSphere( 0.0, 6.0, 0, 1, 20, 20, 1.0, 0.0, 0.0, 2.0, true )
+        );
         //Ground plate
-        physicsObjects.push([
-            fact.createRectOBB(2,0.5,0,10,0.5,10),
-            fact.createRect( 0, -3, 0, 10, 0.2, 10, 1.0, 1.0, 1.0 )
-        ]);
+        physicsObjects.push(
+            fact.createRect( 0, -3, 0, 1, 1, 1, 1.0, 1.0, 1.0, 1.0, false )
+        );
+        
         console.log( physicsObjects );
 
         physicsObjects.forEach(function(physicsObject){
-            physicsObject[1].initBuffers(gl);
+            physicsObject.renderer.initBuffers(gl);
         });
 
-        // objects[9].rotate(gl,90,0,0);
-
-        function update()
+        function update( dt )
         {
             //Rotate scene around origin
             if( keyHandler.mouseDown )
@@ -116,75 +95,13 @@ requirejs([
             {
                 lastMouseX = keyHandler.mouseX;
             }
-
-            //Move sphere on wsad
-            physicsObjects[1][1].color(gl,0.3, 0.3, 0.3);
-            if( keyHandler.keyStatus[65] )
-            {
-                physicsObjects[1][0].translate(-0.1,0,0);
-                physicsObjects[1][1].translate(gl,-0.1,0,0);
-                if( sphereOBBCollisionDetection( physicsObjects[1][0], physicsObjects[2][0] ) )
-                {
-                    physicsObjects[1][1].color(gl,1,0,0);
-                    physicsObjects[1][0].translate(0.1,0,0);
-                    physicsObjects[1][1].translate(gl,0.1,0,0);
-                }
-            }
-            if( keyHandler.keyStatus[68] )
-            {
-                physicsObjects[1][0].translate(0.1,0,0);
-                physicsObjects[1][1].translate(gl,0.1,0,0);
-                if( sphereOBBCollisionDetection( physicsObjects[1][0], physicsObjects[2][0] ) )
-                {
-                    physicsObjects[1][1].color(gl,1,0,0);
-                    physicsObjects[1][0].translate(-0.1,0,0);
-                    physicsObjects[1][1].translate(gl,-0.1,0,0);
-                }
-            }
-            if( keyHandler.keyStatus[87] )
-            {
-                physicsObjects[1][0].translate(0,0.1,0);
-                physicsObjects[1][1].translate(gl,0,0.1,0);
-                if( sphereOBBCollisionDetection( physicsObjects[1][0], physicsObjects[2][0] ) )
-                {
-                    physicsObjects[1][1].color(gl,1,0,0);
-                    physicsObjects[1][0].translate(0,-0.1,0);
-                    physicsObjects[1][1].translate(gl,0,-0.1,0);
-                }
-            }
-            if( keyHandler.keyStatus[83] )
-            {
-                physicsObjects[1][0].translate(0,-0.1,0);
-                physicsObjects[1][1].translate(gl,0,-0.1,0);
-                if( sphereOBBCollisionDetection( physicsObjects[1][0], physicsObjects[2][0] ) )
-                {
-                    physicsObjects[1][1].color(gl,1,0,0);
-                    physicsObjects[1][0].translate(0,0.1,0);
-                    physicsObjects[1][1].translate(gl,0,0.1,0);
-                }
-            }
-            if( keyHandler.keyStatus[88] )
-            {
-                physicsObjects[1][0].rotate(0,-0.1,0);
-                physicsObjects[1][1].rotate(gl,0,-0.1,0);
-                if( sphereOBBCollisionDetection( physicsObjects[1][0], physicsObjects[2][0] ) )
-                {
-                    physicsObjects[1][1].color(gl,1,0,0);
-                    physicsObjects[1][0].rotate(0,0.1,0);
-                    physicsObjects[1][1].rotate(gl,0,0.1,0);
-                }
-            }
-            if( keyHandler.keyStatus[90] )
-            {
-                physicsObjects[1][0].rotate(0.1,0,0);
-                physicsObjects[1][1].rotate(gl,0.1,0,0);
-                if( sphereOBBCollisionDetection( physicsObjects[1][0], physicsObjects[2][0] ) )
-                {
-                    physicsObjects[1][1].color(gl,1,0,0);
-                    physicsObjects[1][0].rotate(-0.1,0,0);
-                    physicsObjects[1][1].rotate(gl,-0.1,0,0);
-                }
-            }
+            
+            //Update all objects
+            var collisionData = OBBSphereCD(physicsObjects[1].boundingBox,physicsObjects[0].boundingBox);
+            // console.log( physicsObjects[1].boundingBox.center[1] );
+            physicsObjects.forEach(function(physicsObject){
+                physicsObject.update( dt, gl, collisionData );
+            });
         }
 
         function draw()
@@ -198,16 +115,20 @@ requirejs([
             glm.mat4.rotateY(mvMatrix, mvMatrix, viewYRotation );
 
             physicsObjects.forEach(function(physicsObject){
-                physicsObject[1].draw(gl, pMatrix, mvMatrix);
+                physicsObject.renderer.draw(gl, pMatrix, mvMatrix);
             });
         }
 
         function loop()
         {
-            fps = Math.floor(1/(( new Date().getTime() - oldTime )/1000));
+            timeDiff = new Date().getTime() - oldTime; 
+            if( timeDiff > 100 )
+                timeDiff = 0;
+            fps = Math.floor(1/(( timeDiff )/1000));
             oldTime = new Date().getTime();
             document.getElementById("fps").innerHTML = fps;
-            update();
+            
+            update( timeDiff / 1000 );
             draw();
             requestAnimFrame(loop);
         }

@@ -57,9 +57,7 @@ define(['gl-matrix-min'],function(glm)
             minDist = testDist;
         if( testDist > maxDist )
             maxDist = testDist;
-        
-        
-        
+
         
         //Check if minDist is inside the sphere
         if( minDist > sphere.radius )

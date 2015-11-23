@@ -1,4 +1,4 @@
-define(['physics/boundingObject','gl-matrix-min'],function(BoundingObject,glm)
+define(['physics/boundingObject','gl-matrix-min','util/rotationMatrix'],function(BoundingObject,glm,RotationMatrix)
 {
     var OrientedBoundingBox = function( x, y, z, w, h, d )
     {
@@ -11,17 +11,7 @@ define(['physics/boundingObject','gl-matrix-min'],function(BoundingObject,glm)
         this.rotation = glm.mat3.create();
         this.rotate = function( xOffset, yOffset, zOffset )
         {
-            var rot = [
-            Math.cos(yOffset)*Math.cos(zOffset),
-            -Math.cos(xOffset)*Math.sin(zOffset)+Math.sin(xOffset)*Math.sin(yOffset)*Math.cos(zOffset),
-            Math.sin(xOffset)*Math.sin(zOffset)+Math.cos(xOffset)*Math.sin(yOffset)*Math.cos(zOffset),
-            Math.cos(yOffset)*Math.sin(zOffset),
-            Math.cos(xOffset)*Math.cos(zOffset)+Math.sin(xOffset)*Math.sin(yOffset)*Math.sin(zOffset),
-            -Math.sin(xOffset)*Math.cos(zOffset)+Math.cos(xOffset)*Math.sin(yOffset)*Math.sin(zOffset),
-            -Math.sin(yOffset),
-            Math.sin(xOffset)*Math.cos(yOffset),
-            Math.cos(xOffset)*Math.cos(yOffset)
-            ];
+            var rot = new RotationMatrix();
             //Rotate the bounding box rotation matrix
             glm.mat3.mul(this.rotation, this.rotation, rot );
         }
