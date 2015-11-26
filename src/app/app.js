@@ -7,7 +7,9 @@ requirejs.config(
         util: '../app/utils',
         init: '../app/init',
         shape: '../app/shapes',
-        physics: '../app/physics'
+        physics: '../app/physics',
+        CD: '../app/physics/collisionDetection',
+        bounding: '../app/physics/bounding'
     }
 });
 
@@ -18,7 +20,7 @@ requirejs([
     'init/getShaders',
     'app/factory',
     'app/input',
-    'physics/sphereOBBCollisionDetection'],
+    'CD/sphereOBBCollisionDetection'],
     function( glm,
         getCanvas,
         initGL,
@@ -74,7 +76,7 @@ requirejs([
         );
         //Ground plate
         physicsObjects.push(
-            fact.createRect( 0, -3, 0, 1, 1, 1, 1.0, 1.0, 1.0, 1.0, false )
+            fact.createRect( 0, -3, 0, 10, 0.2, 10, 1.0, 1.0, 1.0, 1.0, false )
         );
         
         console.log( physicsObjects );

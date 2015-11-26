@@ -17,8 +17,6 @@ define(['gl-matrix-min'],function(glm)
             return Math.min.apply(null, this);
         };
 
-        var bMin = [];
-        var bMax = [];
         var center = sphere.center;
         var radius = sphere.radius;
         var dMin = 0;
@@ -41,11 +39,11 @@ define(['gl-matrix-min'],function(glm)
                         points[4][i], points[5][i], points[6][i], points[7][i]];
             if( center[i] > b.max() )
             {
-                dMin = dMin + Math.pow((center[i]- b.max()),2);
+                dMin += Math.pow((center[i]- b.max()),2);
             }    
             else if( center[i] < b.min() )
             {
-                dMin = dMin + Math.pow((center[i]-b.min()),2);
+                dMin += Math.pow((center[i]-b.min()),2);
             }
         }
         

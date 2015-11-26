@@ -1,4 +1,4 @@
-define(['physics/boundingObject','gl-matrix-min','util/rotationMatrix'],function(BoundingObject,glm,RotationMatrix)
+define(['bounding/boundingObject','gl-matrix-min','util/rotationMatrix'],function(BoundingObject,glm,RotationMatrix)
 {
     var OrientedBoundingBox = function( x, y, z, w, h, d )
     {

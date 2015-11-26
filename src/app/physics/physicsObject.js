@@ -8,7 +8,7 @@ define([],function(){
 		this.xAcceleration = 0;
 		this.yAcceleration = 0;
 		this.zAcceleration = 0;
-		this.bounce = -0.5;
+		this.bounce = -0.6;
 		this.mass = m;
 		this.active = a;
 		
@@ -22,8 +22,14 @@ define([],function(){
 			
 			if( collisionData )
 			{
+                // console.log( this.yVelocity );
 				dy = -this.yVelocity + dt * ( 0.5 * this.yAcceleration * dt * dt );
+                //Temp fix
+                if( this.yVelocity > -1 )
+                    this.yVelocity = 0;
+                //End temp fix
 				this.yVelocity *= this.bounce;
+                
 			}
 			else
 			{				
@@ -37,8 +43,7 @@ define([],function(){
 
 			//Slow down tanslation should be changed to make better calculation			
 			dy /= 60 ;
-			this.renderer.translate( gl, 0.0, dy, 0.0 );
-			this.boundingBox.translate( 0.0, dy, 0.0 );
+			this.translate( gl, 0.0, dy, 0.0 );
 		}
 	}
 	

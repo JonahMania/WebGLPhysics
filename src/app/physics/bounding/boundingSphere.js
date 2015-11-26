@@ -1,4 +1,4 @@
-define(['physics/boundingObject','gl-matrix-min'],function(BoundingObject,glm)
+define(['bounding/boundingObject','gl-matrix-min'],function(BoundingObject,glm)
 {
     var BoundingSphere = function( x, y, z, r )
     {
