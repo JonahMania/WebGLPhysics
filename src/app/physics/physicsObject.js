@@ -22,7 +22,6 @@ define([],function(){
 			
 			if( collisionData )
 			{
-				
 				dy = -this.yVelocity + dt * ( 0.5 * this.yAcceleration * dt * dt );
 				this.yVelocity *= this.bounce;
 			}
@@ -37,7 +36,7 @@ define([],function(){
 			}
 
 			//Slow down tanslation should be changed to make better calculation			
-			dy /= 100;
+			dy /= 60 ;
 			this.renderer.translate( gl, 0.0, dy, 0.0 );
 			this.boundingBox.translate( 0.0, dy, 0.0 );
 		}

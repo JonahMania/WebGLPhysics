@@ -8,61 +8,55 @@ define(['gl-matrix-min'],function(glm)
     return function( oBB, sphere )
     {
 
-        //Find point P ( point on oBB closest to the center of the sphere )
-        //Return p = [x,y,z]
 
-        var minDist;
-        var maxDist;
-        var testDist;
-        //Function to find the squared distance between two points
-        function distSqr( pointA, pointB )
+       Array.prototype.max = function() {
+            return Math.max.apply(null, this);
+        };
+        
+        Array.prototype.min = function() {
+            return Math.min.apply(null, this);
+        };
+
+        var bMin = [];
+        var bMax = [];
+        var center = sphere.center;
+        var radius = sphere.radius;
+        var dMin = 0;
+        
+        var points = [
+        [ oBB.center[0] + oBB.halfWidth, oBB.center[1] + oBB.halfHeight, oBB.center[2] + oBB.halfDepth  ],
+        [ oBB.center[0] + oBB.halfWidth, oBB.center[1] + oBB.halfHeight, oBB.center[2] - oBB.halfDepth  ],
+        [ oBB.center[0] + oBB.halfWidth, oBB.center[1] - oBB.halfHeight, oBB.center[2] + oBB.halfDepth  ],
+        [ oBB.center[0] + oBB.halfWidth, oBB.center[1] - oBB.halfHeight, oBB.center[2] - oBB.halfDepth  ],
+        [ oBB.center[0] - oBB.halfWidth, oBB.center[1] + oBB.halfHeight, oBB.center[2] + oBB.halfDepth  ],
+        [ oBB.center[0] - oBB.halfWidth, oBB.center[1] + oBB.halfHeight, oBB.center[2] - oBB.halfDepth  ],
+        [ oBB.center[0] - oBB.halfWidth, oBB.center[1] - oBB.halfHeight, oBB.center[2] + oBB.halfDepth  ],
+        [ oBB.center[0] - oBB.halfWidth, oBB.center[1] - oBB.halfHeight, oBB.center[2] - oBB.halfDepth  ]];
+        
+        
+        
+        for( var i = 0; i < 3; i++ )
         {
-            return Math.sqrt( Math.pow( pointB[0] - pointA[0], 2 ) + Math.pow( pointB[1] - pointA[1], 2 ) + Math.pow( pointB[2] - pointA[2], 2 ) );
+            var b = [ points[0][i], points[1][i], points[2][i], points[3][i],
+                        points[4][i], points[5][i], points[6][i], points[7][i]];
+            if( center[i] > b.max() )
+            {
+                dMin = dMin + Math.pow((center[i]- b.max()),2);
+            }    
+            else if( center[i] < b.min() )
+            {
+                dMin = dMin + Math.pow((center[i]-b.min()),2);
+            }
         }
         
-        //Find minimum distance between sphere center and all points of the oBB
-        minDist = distSqr( sphere.center, [oBB.center[0]+oBB.halfWidth,oBB.center[1]+oBB.halfHeight,oBB.center[2]+oBB.halfDepth] );
-        testDist = distSqr( sphere.center, [oBB.center[0]+oBB.halfWidth,oBB.center[1]+oBB.halfHeight,oBB.center[2]-oBB.halfDepth] );
-        if( testDist < minDist )
-            minDist = testDist;
-        if( testDist > maxDist )
-            maxDist = testDist;
-        testDist = distSqr( sphere.center, [oBB.center[0]+oBB.halfWidth,oBB.center[1]-oBB.halfHeight,oBB.center[2]+oBB.halfDepth] );
-        if( testDist < minDist )
-            minDist = testDist;
-        if( testDist > maxDist )
-            maxDist = testDist;
-        testDist = distSqr( sphere.center, [oBB.center[0]+oBB.halfWidth,oBB.center[1]-oBB.halfHeight,oBB.center[2]-oBB.halfDepth] );
-        if( testDist < minDist )
-            minDist = testDist;
-        if( testDist > maxDist )
-            maxDist = testDist;
-        testDist = distSqr( sphere.center, [oBB.center[0]-oBB.halfWidth,oBB.center[1]+oBB.halfHeight,oBB.center[2]+oBB.halfDepth] );
-        if( testDist < minDist )
-            minDist = testDist;
-        if( testDist > maxDist )
-            maxDist = testDist;
-        testDist = distSqr( sphere.center, [oBB.center[0]-oBB.halfWidth,oBB.center[1]+oBB.halfHeight,oBB.center[2]-oBB.halfDepth] );
-        if( testDist < minDist )
-            minDist = testDist;
-        if( testDist > maxDist )
-            maxDist = testDist;
-        testDist = distSqr( sphere.center, [oBB.center[0]-oBB.halfWidth,oBB.center[1]-oBB.halfHeight,oBB.center[2]+oBB.halfDepth] );
-        if( testDist < minDist )
-            minDist = testDist;
-        if( testDist > maxDist )
-            maxDist = testDist;
-        testDist = distSqr( sphere.center, [oBB.center[0]-oBB.halfWidth,oBB.center[1]-oBB.halfHeight,oBB.center[2]-oBB.halfDepth] );
-        if( testDist < minDist )
-            minDist = testDist;
-        if( testDist > maxDist )
-            maxDist = testDist;
 
-        
-        //Check if minDist is inside the sphere
-        if( minDist > sphere.radius )
+        if( dMin <= Math.pow(radius,2) )
+        {
+            return true;
+        }
+        else
+        {
             return false;
-        
-        return true;
+        }
     }
 });
