@@ -62,7 +62,7 @@ requirejs([
         var oldTime = 0;
         var timeDiff = 0;
         
-        var viewYRotation = 0;
+        var viewYRotation = -0.7;
         var lastMouseX;
 
         //Initial positions of all objects in the scene
@@ -72,18 +72,25 @@ requirejs([
         var physicsObjects = [];
         
         physicsObjects.push(
-            fact.createSphere( 0.0, 6.0, 0, 1, 20, 20, 1.0, 0.0, 0.0, 2.0, true )
+            fact.createSphere( 0.0, 6.0, 0, 1, 20, 20, 1.0, 0.0, 0.0, 0.2, true )
         );
         //Ground plate
         physicsObjects.push(
             fact.createRect( 0, -3, 0, 10, 0.2, 10, 1.0, 1.0, 1.0, 1.0, false )
         );
+        //Back plate
+        // physicsObjects.push(
+        //     fact.createRect( 0, -3, 0, 10, 6, 0.2, 1.0, 1.0, 1.0, 1.0, false )
+        // );
         
         console.log( physicsObjects );
 
         physicsObjects.forEach(function(physicsObject){
             physicsObject.renderer.initBuffers(gl);
         });
+
+        // physicsObjects[1].rotate( gl, 90, 0, 0 );
+        // physicsObjects[2].translate(gl, 0, 2.9, -5 );
 
         function update( dt )
         {
@@ -98,11 +105,18 @@ requirejs([
                 lastMouseX = keyHandler.mouseX;
             }
             
+            
+            var ballCollision = false;
+            for( var i = 1; i < physicsObjects.length; i++ )
+            {
+                if( OBBSphereCD(physicsObjects[i].boundingBox,physicsObjects[0].boundingBox) )
+                    ballCollision = true;
+            }
             //Update all objects
-            var collisionData = OBBSphereCD(physicsObjects[1].boundingBox,physicsObjects[0].boundingBox);
+            // var collisionData = OBBSphereCD(physicsObjects[1].boundingBox,physicsObjects[0].boundingBox);
             // console.log( physicsObjects[1].boundingBox.center[1] );
             physicsObjects.forEach(function(physicsObject){
-                physicsObject.update( dt, gl, collisionData );
+                physicsObject.update( dt, gl, ballCollision );
             });
         }
 
@@ -124,13 +138,15 @@ requirejs([
         function loop()
         {
             timeDiff = new Date().getTime() - oldTime; 
+            oldTime = new Date().getTime();
             if( timeDiff > 100 )
                 timeDiff = 0;
             fps = Math.floor(1/(( timeDiff )/1000));
-            oldTime = new Date().getTime();
+            
             document.getElementById("fps").innerHTML = fps;
             
             update( timeDiff / 1000 );
+
             draw();
             requestAnimFrame(loop);
         }

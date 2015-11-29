@@ -16,8 +16,6 @@ function(PhysicsObject,Sphere,BoundingSphere)
         }
 	}
 	
-
-    
 	PhysicsSphere.prototype = Object.create( PhysicsObject.prototype );
 	PhysicsSphere.prototype.constructor = PhysicsSphere;
 	return PhysicsSphere;

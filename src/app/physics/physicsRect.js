@@ -14,6 +14,12 @@ function(PhysicsObject,Rect,OrientedBoundingBox)
             this.renderer.translate( gl, xOffset, yOffset, zOffset );
             this.boundingBox.translate( xOffset, yOffset, zOffset );
         }	
+		
+		this.rotate = function( gl, x, y, z )
+		{
+			this.renderer.rotate( gl, x, y, z );
+			this.boundingBox.rotate( x, y, z );
+		}
 	}
 	
 	PhysicsRect.prototype = Object.create( PhysicsObject.prototype );

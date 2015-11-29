@@ -4,46 +4,48 @@ define([],function(){
 		
 		this.xVelocity = 0;
 		this.yVelocity = 0;
-		this.zVelocity = 0;	
+		this.zVelocity = -0.01;	
 		this.xAcceleration = 0;
-		this.yAcceleration = 0;
+        //Gravity 
+        this.yAcceleration = -9.81; 
 		this.zAcceleration = 0;
 		this.bounce = -0.6;
 		this.mass = m;
 		this.active = a;
-		
 	}
 	
 	PhysicsObject.prototype.update = function( dt, gl, collisionData )
 	{
 		if( this.active )
 		{
+			var dx = 0;
 			var dy = 0;
+			var dz = 0;
+			dt /= 60;
 			
 			if( collisionData )
 			{
-                // console.log( this.yVelocity );
+				//d = vi * t + 1/2 * a * t^2
+				dx = this.xVelocity + dt * ( 0.5 * this.xAcceleration * dt * dt );
 				dy = -this.yVelocity + dt * ( 0.5 * this.yAcceleration * dt * dt );
-                //Temp fix
-                if( this.yVelocity > -1 )
+				dz = this.zVelocity + dt * ( 0.5 * this.zAcceleration * dt * dt );
+
+                if( this.yVelocity > -0.015 )
                     this.yVelocity = 0;
-                //End temp fix
+
 				this.yVelocity *= this.bounce;
-                
 			}
 			else
 			{				
 				//d = vi * t + 1/2 * a * t^2
+				dx = this.xVelocity + dt * ( 0.5 * this.xAcceleration * dt * dt );
 				dy = this.yVelocity + dt * ( 0.5 * this.yAcceleration * dt * dt );
-				//Gravity 
-				this.yAcceleration = -9.81; 
+				dz = this.zVelocity + dt * ( 0.5 * this.zAcceleration * dt * dt );
 				//vf = vi + a * dt
 				this.yVelocity = this.yVelocity + this.yAcceleration * dt;
 			}
 
-			//Slow down tanslation should be changed to make better calculation			
-			dy /= 60 ;
-			this.translate( gl, 0.0, dy, 0.0 );
+			this.translate( gl, dx, dy, dz );
 		}
 	}
 	
