@@ -5,7 +5,7 @@ define(['gl-matrix-min'],function(glm)
     * @param {OrientedBoundingBox} oBB
     * @param {BoundingSphere} sphere
     */
-    return function( oBB, sphere )
+    return function( sphere, oBB )
     {
 
 

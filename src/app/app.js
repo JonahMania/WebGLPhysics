@@ -20,14 +20,15 @@ requirejs([
     'init/getShaders',
     'app/factory',
     'app/input',
-    'CD/sphereOBBCollisionDetection'],
+    'physics/physicsEngine'
+],
     function( glm,
         getCanvas,
         initGL,
         getShaders,
         factory,
         input,
-        OBBSphereCD )
+        physicsEngine )
     {
         window.requestAnimFrame = (function()
         {
@@ -105,26 +106,7 @@ requirejs([
                 lastMouseX = keyHandler.mouseX;
             }
             
-            
-            var ballCollision = {};
-            for( var i = 1; i < physicsObjects.length; i++ )
-            {
-                if( OBBSphereCD(physicsObjects[i].boundingBox,physicsObjects[0].boundingBox) )
-                {
-                    ballCollision.collision = true;
-                    if( physicsObjects[i].boundingBox.center[1] < physicsObjects[0].boundingBox.center[1] )
-                        ballCollision['-y'] = true;
-                    if( physicsObjects[i].boundingBox.center[2] < physicsObjects[0].boundingBox.center[2] )
-                        ballCollision['-z'] = true;
-                }
-            }
-            //Update all objects
-            // var collisionData = OBBSphereCD(physicsObjects[1].boundingBox,physicsObjects[0].boundingBox);
-            // console.log( physicsObjects[1].boundingBox.center[1] );
-            // physicsObjects.forEach(function(physicsObject){
-            //     physicsObject.update( dt, gl, ballCollision );
-            // });
-            physicsObjects[0].update( dt, gl, ballCollision );
+            physicsEngine( gl, dt, physicsObjects );
         }
 
         function draw()
@@ -152,7 +134,7 @@ requirejs([
             
             document.getElementById("fps").innerHTML = fps;
             
-            update( timeDiff / 1000 );
+            update( timeDiff / 10000 );
 
             draw();
             requestAnimFrame(loop);
