@@ -79,9 +79,9 @@ requirejs([
             fact.createRect( 0, -3, 0, 10, 0.2, 10, 1.0, 1.0, 1.0, 1.0, false )
         );
         //Back plate
-        // physicsObjects.push(
-        //     fact.createRect( 0, -3, 0, 10, 6, 0.2, 1.0, 1.0, 1.0, 1.0, false )
-        // );
+        physicsObjects.push(
+            fact.createRect( 0, -3, 0, 10, 6, 0.2, 1.0, 1.0, 1.0, 1.0, false )
+        );
         
         console.log( physicsObjects );
 
@@ -90,7 +90,7 @@ requirejs([
         });
 
         // physicsObjects[1].rotate( gl, 90, 0, 0 );
-        // physicsObjects[2].translate(gl, 0, 2.9, -5 );
+        physicsObjects[2].translate(gl, 0, 2.9, -5 );
 
         function update( dt )
         {
@@ -106,18 +106,25 @@ requirejs([
             }
             
             
-            var ballCollision = false;
+            var ballCollision = {};
             for( var i = 1; i < physicsObjects.length; i++ )
             {
                 if( OBBSphereCD(physicsObjects[i].boundingBox,physicsObjects[0].boundingBox) )
-                    ballCollision = true;
+                {
+                    ballCollision.collision = true;
+                    if( physicsObjects[i].boundingBox.center[1] < physicsObjects[0].boundingBox.center[1] )
+                        ballCollision['-y'] = true;
+                    if( physicsObjects[i].boundingBox.center[2] < physicsObjects[0].boundingBox.center[2] )
+                        ballCollision['-z'] = true;
+                }
             }
             //Update all objects
             // var collisionData = OBBSphereCD(physicsObjects[1].boundingBox,physicsObjects[0].boundingBox);
             // console.log( physicsObjects[1].boundingBox.center[1] );
-            physicsObjects.forEach(function(physicsObject){
-                physicsObject.update( dt, gl, ballCollision );
-            });
+            // physicsObjects.forEach(function(physicsObject){
+            //     physicsObject.update( dt, gl, ballCollision );
+            // });
+            physicsObjects[0].update( dt, gl, ballCollision );
         }
 
         function draw()
