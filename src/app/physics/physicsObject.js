@@ -3,7 +3,7 @@ define(['gl-matrix-min'],function(glm){
 	{
 
 		this.velocity = glm.vec3.create();
-		// this.velocity[2] = -0.1;
+		this.velocity[2] = -0.15;
 		this.acceleration = glm.vec3.create();
         //Gravity 
         this.acceleration[1] = -9.81; 
