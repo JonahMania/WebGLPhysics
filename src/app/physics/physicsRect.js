@@ -9,12 +9,6 @@ function(PhysicsObject,Rect,OrientedBoundingBox)
 		this.type = 'rect';
 		this.renderer = new Rect( x, y, z, w, h, d, r, g, b );
 		this.boundingBox = new OrientedBoundingBox( x, y, z, w, h, d );
-
-        this.translate = function( gl, xOffset, yOffset, zOffset ) 
-        {
-            this.renderer.translate( gl, xOffset, yOffset, zOffset );
-            this.boundingBox.translate( xOffset, yOffset, zOffset );
-        }	
 		
 		this.rotate = function( gl, x, y, z )
 		{

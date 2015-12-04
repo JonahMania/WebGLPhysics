@@ -1,7 +1,15 @@
-define(['CD/sphereOBBCollisionDetection'],function(sphereOBBCD)
+define(['gl-matrix-min','CD/sphereOBBCollisionDetection'],function(glm,sphereOBBCD)
 {
 	return function( gl, dt, objects )
 	{
+
+		//Integrate all objects
+		objects.forEach(function(object){
+			if( object.active )
+			{
+				object.integrate( gl, dt );
+			}
+		});
 
 		var collisionData;
 		for( var i = 0; i < objects.length; i++ )
@@ -13,20 +21,19 @@ define(['CD/sphereOBBCollisionDetection'],function(sphereOBBCD)
 					collisionData = sphereOBBCD( objects[i].boundingBox, objects[j].boundingBox );	
 					if( collisionData )
 					{
-						//TODO Temporary fix to move sphere once collision hits on the y axis
-						objects[i].translate(gl,0,-objects[i].velocity[1] + dt * ( 0.5 * objects[i].acceleration[1] * dt * dt ),0);
-						objects[i].velocity[1] *= objects[i].bounce;
+
+						//Move object back to move the object out of collision
+						objects[i].unIntegrate(gl,dt);
+						//Scale collision data by the objects bounce factor
+						glm.vec3.scale(collisionData,collisionData,objects[i].bounce);
+						//Multiply the objects velocity by the collision data normal
+						glm.vec3.mul(objects[i].velocity,objects[i].velocity,collisionData);
+						
 					}
 				}
 			}
 		}
+		
 
-		//Integrate all objects
-		objects.forEach(function(object){
-			if( object.active )
-			{
-				object.integrate( gl, dt );
-			}
-		});
 	}
 });

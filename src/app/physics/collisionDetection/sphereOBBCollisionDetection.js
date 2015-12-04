@@ -7,8 +7,6 @@ define(['gl-matrix-min'],function(glm)
     */
     return function( sphere, oBB )
     {
-
-
        Array.prototype.max = function() {
             return Math.max.apply(null, this);
         };
@@ -31,8 +29,6 @@ define(['gl-matrix-min'],function(glm)
         [ oBB.center[0] - oBB.halfWidth, oBB.center[1] - oBB.halfHeight, oBB.center[2] + oBB.halfDepth  ],
         [ oBB.center[0] - oBB.halfWidth, oBB.center[1] - oBB.halfHeight, oBB.center[2] - oBB.halfDepth  ]];
         
-        
-        
         for( var i = 0; i < 3; i++ )
         {
             var b = [ points[0][i], points[1][i], points[2][i], points[3][i],
@@ -47,13 +43,21 @@ define(['gl-matrix-min'],function(glm)
             }
         }
         
-
         if( dMin <= Math.pow(radius,2) )
         {
-            return true;
+            //Calculate the vector between both objects and normalize
+            var direction = glm.vec3.create();
+            
+            direction[0] = oBB.center[0] - sphere.center[0];
+            direction[1] = oBB.center[1] - sphere.center[1];
+            direction[2] = oBB.center[2] - sphere.center[2];
+            glm.vec3.normalize( direction, direction );
+
+            return direction;
         }
         else
         {
+            
             return false;
         }
     }
