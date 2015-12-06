@@ -15,17 +15,15 @@ html, body
     display:block;
 }
 
-p
+div p
 {
     color:white;
-    position:absolute;
+    position:relative;
     display:inline;
     font-size: 1.2em;
-    left: 10px;
-    top: 10px;
 }
 
-#fps
+#wrapper
 {
-    left:55px;
+    position: absolute;
 }

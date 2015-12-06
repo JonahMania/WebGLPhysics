@@ -3,7 +3,8 @@ define(['gl-matrix-min'],function(glm){
 	{
 
 		this.velocity = glm.vec3.create();
-		this.velocity[2] = -0.15;
+		this.velocity[2] = -0.1;
+        this.velocity[0] = 0.05;
 		this.acceleration = glm.vec3.create();
         //Gravity 
         this.acceleration[1] = -9.81; 
@@ -23,7 +24,6 @@ define(['gl-matrix-min'],function(glm){
 		var dx = this.velocity[0] + dt * ( 0.5 * this.acceleration[0] * dt * dt );
 		var dy = this.velocity[1] + dt * ( 0.5 * this.acceleration[1] * dt * dt );
 		var dz = this.velocity[2] + dt * ( 0.5 * this.acceleration[2] * dt * dt );
-		
 		//Translate object
 		this.translate( gl, dx, dy, dz );
 	}

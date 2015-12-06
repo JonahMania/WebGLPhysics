@@ -71,9 +71,9 @@ requirejs([
 
         //Create physics objects
         var physicsObjects = [];
-        
+        //Sphere
         physicsObjects.push(
-            fact.createSphere( 0.0, 6.0, 0, 1, 20, 20, 1.0, 0.0, 0.0, 0.2, true )
+            fact.createSphere( -3.0, 6.0, 0, 1, 20, 20, 1.0, 0.0, 0.0, 0.2, true )
         );
         //Ground plate
         physicsObjects.push(
