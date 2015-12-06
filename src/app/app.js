@@ -49,12 +49,21 @@ requirejs([
         //Prospective matrix
         var pMatrix = glm.mat4.create();
         var keyHandler = new input();
-
+        var running = false;
         document.onkeydown = keyHandler.handleKeyDown;
         document.onkeyup = keyHandler.handleKeyUp;
         document.onmousedown = keyHandler.handleMouseDown;
         document.onmouseup = keyHandler.handleMouseUp;
         document.onmousemove = keyHandler.updateMousePosition;
+        var runStop = document.getElementById('runStop');
+        runStop.onclick = function() 
+        {
+            running = !running;
+            if( running )
+                runStop.innerHTML = "Stop";
+            else
+                runStop.innerHTML = "Resume";
+        }
 
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.enable(gl.DEPTH_TEST);
@@ -63,7 +72,7 @@ requirejs([
         var oldTime = 0;
         var timeDiff = 0;
         
-        var viewYRotation = -0.7;
+        var viewYRotation = 0.0;
         var lastMouseX;
 
         //Initial positions of all objects in the scene
@@ -106,7 +115,11 @@ requirejs([
                 lastMouseX = keyHandler.mouseX;
             }
             
-            physicsEngine( gl, dt, physicsObjects );
+            if( running )
+            {
+                physicsEngine( gl, dt, physicsObjects );
+            }
+
         }
 
         function draw()
