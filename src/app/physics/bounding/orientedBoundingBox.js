@@ -11,9 +11,10 @@ define(['bounding/boundingObject','gl-matrix-min','util/rotationMatrix'],functio
         this.rotation = glm.mat3.create();
         this.rotate = function( xOffset, yOffset, zOffset )
         {
-            var rot = new RotationMatrix();
+            var rot = new RotationMatrix(xOffset,yOffset,zOffset);
             //Rotate the bounding box rotation matrix
             glm.mat3.mul(this.rotation, this.rotation, rot );
+
         }
     }
     OrientedBoundingBox.prototype = Object.create(BoundingObject.prototype);

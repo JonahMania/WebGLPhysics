@@ -56,7 +56,7 @@ requirejs([
         document.onmouseup = keyHandler.handleMouseUp;
         document.onmousemove = keyHandler.updateMousePosition;
         var runStop = document.getElementById('runStop');
-        runStop.onclick = function() 
+        runStop.onclick = function()
         {
             running = !running;
             if( running )
@@ -71,7 +71,7 @@ requirejs([
         var fps = 0;
         var oldTime = 0;
         var timeDiff = 0;
-        
+
         var viewYRotation = 0.0;
         var lastMouseX;
 
@@ -82,24 +82,24 @@ requirejs([
         var physicsObjects = [];
         //Sphere
         physicsObjects.push(
-            fact.createSphere( -3.0, 6.0, 0, 1, 20, 20, 1.0, 0.0, 0.0, 0.2, true )
+            fact.createSphere( -3.0, 6.0, 2, 1, 20, 20, 1.0, 0.0, 0.0, 0.2, true )
         );
         //Ground plate
         physicsObjects.push(
-            fact.createRect( 0, -3, 0, 10, 0.2, 10, 1.0, 1.0, 1.0, 1.0, false )
+            fact.createRect( 0, -3, 0, 16, 0.2, 16, 1.0, 1.0, 1.0, 1.0, false )
         );
         //Back plate
         physicsObjects.push(
-            fact.createRect( 0, -3, 0, 10, 6, 0.2, 1.0, 1.0, 1.0, 1.0, false )
+            fact.createRect( 0, -2.4, 0, 7, 7, 4, 0.3, 0.2, 0.8, 1.0, false )
         );
-        
+
         console.log( physicsObjects );
 
         physicsObjects.forEach(function(physicsObject){
             physicsObject.renderer.initBuffers(gl);
         });
 
-        // physicsObjects[1].rotate( gl, 90, 0, 0 );
+        // physicsObjects[2].rotate( gl, 0, 70, 0 );
         physicsObjects[2].translate(gl, 0, 2.9, -5 );
 
         function update( dt )
@@ -114,7 +114,7 @@ requirejs([
             {
                 lastMouseX = keyHandler.mouseX;
             }
-            
+
             if( running )
             {
                 physicsEngine( gl, dt, physicsObjects );
@@ -139,14 +139,14 @@ requirejs([
 
         function loop()
         {
-            timeDiff = new Date().getTime() - oldTime; 
+            timeDiff = new Date().getTime() - oldTime;
             oldTime = new Date().getTime();
             if( timeDiff > 100 )
                 timeDiff = 0;
             fps = Math.floor(1/(( timeDiff )/1000));
-            
+
             document.getElementById("fps").innerHTML = fps;
-            
+
             update( timeDiff / 10000 );
 
             draw();
