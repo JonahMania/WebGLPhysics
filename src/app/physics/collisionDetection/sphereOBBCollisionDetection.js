@@ -63,7 +63,10 @@ define(['gl-matrix-min'],function(glm)
                 }
             });
 
-            return direction;
+            return [
+                direction,
+                false
+            ];
         }
         else
         {

@@ -72,7 +72,7 @@ requirejs([
         var oldTime = 0;
         var timeDiff = 0;
 
-        var viewYRotation = 0.0;
+        var viewYRotation = -0.8;
         var lastMouseX;
 
         //Initial positions of all objects in the scene
@@ -91,6 +91,10 @@ requirejs([
         //Back plate
         physicsObjects.push(
             fact.createRect( 0, -2.4, 0, 7, 7, 4, 0.3, 0.2, 0.8, 1.0, false )
+        );
+        //Sphere 2
+        physicsObjects.push(
+            fact.createSphere( 3.0, 4.0, 2, 1, 20, 20, 1.0, 0.0, 0.0, 0.2, true )
         );
 
         console.log( physicsObjects );
