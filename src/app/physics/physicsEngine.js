@@ -12,23 +12,25 @@ define(['CD/sphereOBBCollisionDetection','physics/handleCollision'],function(sph
             }
         });
 
-
         for( var i = 0; i < objects.length; i++ )
         {
             for( var j = i+1; j < objects.length; j++ )
             {
                 collisionData = false;
+
                 if( objects[i].type === 'sphere' && objects[j].type === 'rect' )
                 {
                     collisionData = sphereOBBCD( objects[i].boundingBox, objects[j].boundingBox );
+                    handleCollision( gl, dt, collisionData[0], objects[i] );
                 }
                 else if( objects[i].type === 'rect' && objects[j].type === 'sphere' )
                 {
                     collisionData = sphereOBBCD( objects[j].boundingBox, objects[i].boundingBox );
+                    handleCollision( gl, dt, collisionData[0], objects[j] );
                 }
 
-                handleCollision( gl, dt, collisionData[0], objects[i] );
-                handleCollision( gl, dt, collisionData[0], objects[j] );
+
+
             }
         }
     }

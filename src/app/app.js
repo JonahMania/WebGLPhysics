@@ -18,7 +18,7 @@ requirejs([
     'init/getCanvas',
     'init/initGL',
     'init/getShaders',
-    'app/factory',
+    'app/createObjects',
     'app/input',
     'physics/physicsEngine'
 ],
@@ -26,7 +26,7 @@ requirejs([
         getCanvas,
         initGL,
         getShaders,
-        factory,
+        createObjects,
         input,
         physicsEngine )
     {
@@ -75,27 +75,11 @@ requirejs([
         var viewYRotation = -0.8;
         var lastMouseX;
 
-        //Initial positions of all objects in the scene
-        var fact = new factory();
 
         //Create physics objects
-        var physicsObjects = [];
-        //Sphere
-        physicsObjects.push(
-            fact.createSphere( -3.0, 6.0, 2, 1, 20, 20, 1.0, 0.0, 0.0, 0.2, true )
-        );
-        //Ground plate
-        physicsObjects.push(
-            fact.createRect( 0, -3, 0, 16, 0.2, 16, 1.0, 1.0, 1.0, 1.0, false )
-        );
-        //Back plate
-        physicsObjects.push(
-            fact.createRect( 0, -2.4, 0, 7, 7, 4, 0.3, 0.2, 0.8, 1.0, false )
-        );
-        //Sphere 2
-        physicsObjects.push(
-            fact.createSphere( 3.0, 4.0, 2, 1, 20, 20, 1.0, 0.0, 0.0, 0.2, true )
-        );
+        createObjects.create();
+        createObjects.setValues();
+        var physicsObjects = createObjects.getObjects();
 
         console.log( physicsObjects );
 
@@ -151,7 +135,7 @@ requirejs([
 
             document.getElementById("fps").innerHTML = fps;
 
-            update( timeDiff / 10000 );
+            update( timeDiff / 500 );
 
             draw();
             requestAnimFrame(loop);

@@ -50,21 +50,29 @@ define(['gl-matrix-min'],function(glm)
 
         if( dMin <= Math.pow(radius,2) )
         {
-
             var half = [oBB.halfWidth,oBB.halfHeight,oBB.halfDepth];
             axis.forEach( function( dir, index )
             {
                 if( dir )
                 {
                     if( center[index] > oBB.center[index] + half[index] )
-                        direction[index] = 1;
+                    {
+                        // console.log( index," : ",oBB.center[index] + half[index] - (center[index] -radius) );
+                        direction[index] = oBB.center[index] + half[index] - (center[index] -radius);
+
+                    }
                     else
-                        direction[index] = -1;
+                    {
+                        // console.log( index," : ",oBB.center[index] - half[index] - ( center[index] + radius ))
+                        direction[index] = oBB.center[index] - half[index] - ( center[index] + radius );
+                    }
                 }
             });
 
             return [
-                direction,
+                {
+                    direction:direction
+                },
                 false
             ];
         }
