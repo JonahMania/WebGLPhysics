@@ -34,8 +34,9 @@ define(['CD/sphereOBBCollisionDetection',
                 }
                 else if( objects[i].type === 'sphere' && objects[j].type === 'sphere' )
                 {
-                    if( sphereSphereCD( objects[i].boundingBox, objects[j].boundingBox ) )
-                        sphereSphereCR( gl, objects[i], objects[j] );
+                    var distance = sphereSphereCD( objects[i], objects[j] );
+                    if( distance )
+                        sphereSphereCR( gl, objects[i], objects[j], distance );
                 }
 
 

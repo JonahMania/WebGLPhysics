@@ -7,6 +7,7 @@ define(['gl-matrix-min'],function(glm)
     */
     return function( sphere, oBB )
     {
+        //TODO fix to account for moving objects
         var center = glm.vec3.create();
         glm.vec3.add(center,sphere.boundingBox.center,sphere.direction);
         var dMin = 0;
