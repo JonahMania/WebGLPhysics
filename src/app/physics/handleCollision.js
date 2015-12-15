@@ -19,7 +19,7 @@ define(['gl-matrix-min'],function(glm){
             });
             //Multiply the objects velocity by the collision data normal
             glm.vec3.mul(object.velocity,object.velocity,collisionData.direction);
-            object.integrate( gl, dt );
+            // object.integrate( gl, dt );
 
         }
     }

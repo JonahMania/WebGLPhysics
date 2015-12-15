@@ -1,4 +1,4 @@
-define([],function()
+define(['gl-matrix-min'],function(glm)
 {
     /**
     * Checks collision between two bounding spheres

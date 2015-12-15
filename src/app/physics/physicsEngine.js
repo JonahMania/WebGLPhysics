@@ -1,14 +1,20 @@
-define(['CD/sphereOBBCollisionDetection','physics/handleCollision'],function(sphereOBBCD,handleCollision)
+define(['CD/sphereOBBCollisionDetection',
+    'CD/sphereSphereCollisionDetection',
+    'CR/resolveSphereRect',
+    'CR/resolveSphereSphere'],
+    function(sphereOBBCD,
+        sphereSphereCD,
+        sphereRectCR,
+        sphereSphereCR )
 {
     return function( gl, dt, objects )
     {
-        var collisionData;
 
-		//Integrate all objects
+        //Integrate all objects
         objects.forEach(function(object){
             if( object.active )
             {
-                object.integrate( gl, dt );
+                object.integrate( dt );
             }
         });
 
@@ -16,22 +22,32 @@ define(['CD/sphereOBBCollisionDetection','physics/handleCollision'],function(sph
         {
             for( var j = i+1; j < objects.length; j++ )
             {
-                collisionData = false;
-
                 if( objects[i].type === 'sphere' && objects[j].type === 'rect' )
                 {
-                    collisionData = sphereOBBCD( objects[i].boundingBox, objects[j].boundingBox );
-                    handleCollision( gl, dt, collisionData[0], objects[i] );
+                    if( sphereOBBCD( objects[i], objects[j].boundingBox ) )
+                        sphereRectCR( gl, dt, objects[i], objects[j] );
                 }
                 else if( objects[i].type === 'rect' && objects[j].type === 'sphere' )
                 {
-                    collisionData = sphereOBBCD( objects[j].boundingBox, objects[i].boundingBox );
-                    handleCollision( gl, dt, collisionData[0], objects[j] );
+                    if( sphereOBBCD( objects[j], objects[i].boundingBox ) )
+                        sphereRectCR( gl, dt, objects[j], objects[i] );
                 }
-
+                else if( objects[i].type === 'sphere' && objects[j].type === 'sphere' )
+                {
+                    if( sphereSphereCD( objects[i].boundingBox, objects[j].boundingBox ) )
+                        sphereSphereCR( gl, objects[i], objects[j] );
+                }
 
 
             }
         }
+
+        //Translate all objects
+        objects.forEach(function(object){
+            if( object.active )
+            {
+                object.translate( gl, object.direction[0], object.direction[1], object.direction[2] );
+            }
+        });
     }
 });

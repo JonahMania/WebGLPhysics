@@ -9,6 +9,7 @@ requirejs.config(
         shape: '../app/shapes',
         physics: '../app/physics',
         CD: '../app/physics/collisionDetection',
+        CR: '../app/physics/collisionResolution',
         bounding: '../app/physics/bounding'
     }
 });
@@ -60,7 +61,7 @@ requirejs([
         {
             running = !running;
             if( running )
-                runStop.innerHTML = "Stop";
+                runStop.innerHTML = "Pause";
             else
                 runStop.innerHTML = "Resume";
         }
@@ -78,7 +79,6 @@ requirejs([
 
         //Create physics objects
         createObjects.create();
-        createObjects.setValues();
         var physicsObjects = createObjects.getObjects();
 
         console.log( physicsObjects );
@@ -86,9 +86,8 @@ requirejs([
         physicsObjects.forEach(function(physicsObject){
             physicsObject.renderer.initBuffers(gl);
         });
-
-        // physicsObjects[2].rotate( gl, 0, 70, 0 );
-        physicsObjects[2].translate(gl, 0, 2.9, -5 );
+        createObjects.setPosition(gl);
+        createObjects.setValues();
 
         function update( dt )
         {
@@ -135,7 +134,7 @@ requirejs([
 
             document.getElementById("fps").innerHTML = fps;
 
-            update( timeDiff / 500 );
+            update( timeDiff / 600 );
 
             draw();
             requestAnimFrame(loop);
